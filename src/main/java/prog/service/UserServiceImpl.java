@@ -2,15 +2,19 @@ package prog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import prog.dao.UserDAO;
+import prog.dao.UserDao;
 import prog.model.User;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final UserDao userDAO;
+
     @Autowired
-    private UserDAO userDAO;
+    public UserServiceImpl(UserDao userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     public void save(User user) {
@@ -37,3 +41,4 @@ public class UserServiceImpl implements UserService {
         userDAO.delete(id);
     }
 }
+

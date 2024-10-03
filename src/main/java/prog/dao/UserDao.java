@@ -5,7 +5,7 @@ import prog.model.User;
 
 import java.util.List;
 
-public interface UserDAO {
+public interface UserDao {
     void save(User user);
     List<User> findAll();
     User findById(Long id);

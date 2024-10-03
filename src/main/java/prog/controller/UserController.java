@@ -7,19 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import prog.dao.UserDAO;
 import prog.model.User;
+import prog.service.UserService;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserDAO userDAO;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String listUsers(Model model) {
-        model.addAttribute("users", userDAO.findAll());
+        model.addAttribute("users", userService.findAll());
         return "user-list";
     }
 
@@ -36,29 +40,29 @@ public class UserController {
         user.setId(id);
         user.setName(name);
         user.setEmail(email);
-        userDAO.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/edit")
     public String showFormForUpdate(@RequestParam("userId") Long id, Model model) {
-        User user = userDAO.findById(id);
+        User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user-form";
     }
 
     @PostMapping("/update")
     public String updateUser(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("email") String email) {
-        User user = userDAO.findById(id);
+        User user = userService.findById(id);
         user.setName(name);
         user.setEmail(email);
-        userDAO.update(user);
+        userService.update(user);
         return "redirect:/users";
     }
 
     @GetMapping("/delete")
     public String deleteUser(@RequestParam("userId") Long id) {
-        userDAO.delete(id);
+        userService.delete(id);
         return "redirect:/users";
     }
 }
